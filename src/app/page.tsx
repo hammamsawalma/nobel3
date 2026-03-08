@@ -15,21 +15,32 @@ import TrustMarquee from "@/components/TrustMarquee";
 
 export default function Home() {
     return (
-        <>
+        <main style={{ position: "relative" }}>
+            {/* 
+                HeroSection handles its own "sticky" behavior, so it stays fixed in the background 
+                while the rest of the page content scrolls over it.
+            */}
             <HeroSection />
-            <MarketTicker />
-            <AboutSection />
-            <ServicesSection />
-            <PhilosophySection />
-            <TrajectoryCalculator />
-            <TestimonialsSection />
-            <AwardsSection />
-            <SecuritySection />
-            <FaqSection />
-            <CTASection />
-            <ContactSection />
-            <NewsletterSection />
-            <TrustMarquee />
-        </>
+
+            {/* 
+                Wrap all subsequent sections in a relative container with a higher z-index 
+                and background color so they slide *over* the sticky hero section.
+            */}
+            <div style={{ position: "relative", zIndex: 10, background: "var(--color-noble-black)", boxShadow: "0 -20px 40px rgba(0,0,0,0.5)" }}>
+                <MarketTicker />
+                <AboutSection />
+                <ServicesSection />
+                <PhilosophySection />
+                <TrajectoryCalculator />
+                <TestimonialsSection />
+                <AwardsSection />
+                <SecuritySection />
+                <FaqSection />
+                <CTASection />
+                <ContactSection />
+                <NewsletterSection />
+                <TrustMarquee />
+            </div>
+        </main>
     );
 }

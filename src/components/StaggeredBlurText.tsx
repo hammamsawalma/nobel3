@@ -6,8 +6,9 @@ import { useRef } from "react";
 interface StaggeredBlurTextProps {
     text: string;
     className?: string;
-    as?: "h1" | "h2" | "h3" | "h4" | "p" | "span";
+    as?: "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div";
     staggerDelay?: number;
+    delay?: number;
     style?: React.CSSProperties;
 }
 
@@ -16,6 +17,7 @@ export default function StaggeredBlurText({
     className,
     as: Tag = "h2",
     staggerDelay = 0.05,
+    delay = 0,
     style,
 }: StaggeredBlurTextProps) {
     const ref = useRef<HTMLDivElement>(null);
@@ -31,7 +33,7 @@ export default function StaggeredBlurText({
                     animate={isInView ? { opacity: 1, filter: "blur(0px)", y: 0 } : {}}
                     transition={{
                         duration: 0.6,
-                        delay: i * staggerDelay,
+                        delay: delay + (i * staggerDelay),
                         ease: [0.16, 1, 0.3, 1],
                     }}
                     style={{ display: "inline-block" }}

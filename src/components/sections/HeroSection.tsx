@@ -3,9 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import StaggeredBlurText from "@/components/StaggeredBlurText";
 import CinematicReveal from "@/components/CinematicReveal";
+import MagneticButton from "@/components/MagneticButton";
+import IslandCard from "@/components/IslandCard";
 import { ChevronDown } from "lucide-react";
 
 function AnimatedCounter({ target, suffix = "", prefix = "" }: { target: number; suffix?: string; prefix?: string }) {
@@ -53,188 +55,367 @@ function AnimatedCounter({ target, suffix = "", prefix = "" }: { target: number;
 
 export default function HeroSection() {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isHovered, setIsHovered] = useState(false);
+
+    // Scroll Progress for Sticky Effect
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end start"],
     });
+
+    // Subtly scale and fade as user scrolls down (Sticky Stacking Effect)
+    const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
+    const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.3]);
     const y = useTransform(scrollYProgress, [0, 1], [0, 150]);
-    const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+    // Mouse Tracking for the Monolith Tilting
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    const springConfig = { damping: 25, stiffness: 200 };
+    const springX = useSpring(mouseX, springConfig);
+    const springY = useSpring(mouseY, springConfig);
+
+    const rotateX = useTransform(springY, [-0.5, 0.5], ["5deg", "-5deg"]);
+    const rotateY = useTransform(springX, [-0.5, 0.5], ["-5deg", "5deg"]);
+
+    // Spotlight Center Tracking
+    const [spotlightPos, setSpotlightPos] = useState({ x: 50, y: 50 });
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        mouseX.set(x);
+        mouseY.set(y);
+
+        setSpotlightPos({
+            x: ((e.clientX - rect.left) / rect.width) * 100,
+            y: ((e.clientY - rect.top) / rect.height) * 100,
+        });
+    };
+
+    const handleMouseLeave = () => {
+        mouseX.set(0);
+        mouseY.set(0);
+        setIsHovered(false);
+    };
 
     return (
         <section
             ref={containerRef}
             style={{
-                height: "100vh",
+                height: "120vh", // Extra height to allow scrolling up (sticky)
                 position: "relative",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                overflow: "hidden",
             }}
         >
-            {/* Parallax Background */}
             <motion.div
-                style={{ y, position: "absolute", inset: "-10%", zIndex: 0 }}
-                initial={{ scale: 1 }}
-                animate={{ scale: 1.1 }}
-                transition={{ duration: 30, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
+                style={{
+                    position: "sticky",
+                    top: 0,
+                    height: "100vh",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    overflow: "hidden",
+                    scale,
+                    opacity,
+                    transformOrigin: "center center",
+                }}
             >
-                <Image
-                    src="/images/hero/hero_banner.png"
-                    alt="Noble Rock Heritage Library"
-                    fill
-                    style={{ objectFit: "cover" }}
-                    priority
-                    quality={90}
-                />
-                <div
-                    style={{
-                        position: "absolute",
-                        inset: 0,
-                        background: "linear-gradient(to bottom, rgba(10,10,10,0.6) 0%, rgba(10,10,10,0.4) 40%, rgba(10,10,10,0.85) 100%)",
-                    }}
-                />
-            </motion.div>
-
-            {/* Content */}
-            <motion.div style={{ opacity, position: "relative", zIndex: 1, textAlign: "center", padding: "2rem", maxWidth: "900px" }}>
-                {/* Badge */}
-                <CinematicReveal type="fadeUp" delay={0.2}>
-
+                {/* 1. Deep Background with Initial Blur */}
+                <motion.div
+                    initial={{ filter: "blur(20px)", scale: 1.1 }}
+                    animate={{ filter: "blur(0px)", scale: 1.05 }}
+                    transition={{ duration: 2.5, ease: "easeOut" }}
+                    style={{ position: "absolute", inset: "-10%", zIndex: 0 }}
+                >
+                    <Image
+                        src="/images/hero/hero_banner.png"
+                        alt="Noble Rock Heritage"
+                        fill
+                        style={{ objectFit: "cover" }}
+                        priority
+                        quality={90}
+                    />
                     <div
                         style={{
-                            display: "inline-block",
-                            padding: "0.5rem 1.5rem",
-                            border: "1px solid var(--color-noble-gold-muted)",
-                            borderRadius: "100px",
-                            fontSize: "0.65rem",
-                            letterSpacing: "0.2em",
-                            textTransform: "uppercase",
-                            color: "var(--color-noble-gold)",
-                            fontFamily: "var(--font-body)",
-                            fontWeight: 500,
-                            marginBottom: "2rem",
+                            position: "absolute",
+                            inset: 0,
+                            background: "linear-gradient(to bottom, rgba(10,10,15,0.85) 0%, rgba(10,10,15,0.7) 40%, rgba(10,10,15,0.95) 100%)",
                         }}
-                    >
-                        Absolute Fiduciary Restraint
-                    </div>
-                </CinematicReveal>
+                    />
+                </motion.div>
 
-                {/* Title */}
-                <StaggeredBlurText
-                    text="Preserving Legacy. Defending Capital."
-                    as="h1"
-                    className="text-gold-gradient"
-                    style={{ justifyContent: "center", marginBottom: "1.5rem" }}
-                    staggerDelay={0.06}
-                />
-
-                {/* Stats */}
-                <CinematicReveal type="fadeUp" delay={1}>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            gap: "3rem",
-                            flexWrap: "wrap",
-                            marginBottom: "2.5rem",
-                        }}
-                    >
-                        {[
-                            { value: 4.2, suffix: "B+", prefix: "$", label: "Assets Under Management" },
-                            { value: 1987, suffix: "", prefix: "", label: "Established" },
-                            { value: 100, suffix: "%", prefix: "", label: "ASIC Regulated" },
-                        ].map((stat) => (
-                            <div key={stat.label} style={{ textAlign: "center" }}>
-                                <div
-                                    style={{
-                                        fontFamily: "var(--font-heading)",
-                                        fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
-                                        fontWeight: 700,
-                                        color: "var(--color-noble-gold)",
-                                    }}
-                                >
-                                    {stat.prefix === "$" ? (
-                                        <><AnimatedCounter target={stat.value} prefix="$" suffix="B+" /></>
-                                    ) : stat.label === "Established" ? (
-                                        <AnimatedCounter target={stat.value} />
-                                    ) : (
-                                        <AnimatedCounter target={stat.value} suffix="%" />
-                                    )}
-                                </div>
-                                <div
-                                    style={{
-                                        fontSize: "0.65rem",
-                                        letterSpacing: "0.15em",
-                                        textTransform: "uppercase",
-                                        color: "var(--color-noble-slate)",
-                                        marginTop: "0.25rem",
-                                        fontFamily: "var(--font-body)",
-                                    }}
-                                >
-                                    {stat.label}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </CinematicReveal>
-
-                {/* CTAs */}
-                <CinematicReveal type="fadeUp" delay={1.4}>
-                    <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-                        <Link href="/the-firm" className="btn-noble-primary">
-                            Discover Our Heritage
-                        </Link>
-                        <Link href="/portal" className="btn-noble-secondary">
-                            Client Vault Access
-                        </Link>
-                    </div>
-                </CinematicReveal>
-            </motion.div>
-
-            {/* Scroll Indicator */}
-            <motion.div
-                style={{ opacity }}
-                className="scroll-indicator"
-            >
-                <div
+                {/* Massive Animated Watermark behind Monolith */}
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5, duration: 2 }}
                     style={{
                         position: "absolute",
-                        bottom: "2.5rem",
+                        top: "50%",
                         left: "50%",
-                        transform: "translateX(-50%)",
+                        transform: "translate(-50%, -50%)",
+                        zIndex: 1,
+                        color: "rgba(201, 168, 76, 0.03)",
+                        fontFamily: "var(--font-heading)",
+                        fontSize: "clamp(20rem, 40vw, 40rem)",
+                        fontWeight: 800,
+                        lineHeight: 1,
+                        whiteSpace: "nowrap",
+                        pointerEvents: "none",
+                        userSelect: "none",
+                    }}
+                >
+                    NR
+                </motion.div>
+
+                {/* 2. The Absolute Monolith */}
+                <motion.div
+                    onMouseMove={handleMouseMove}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={handleMouseLeave}
+                    style={{
+                        position: "relative",
+                        zIndex: 2,
+                        width: "90%",
+                        maxWidth: "1100px",
+                        padding: "clamp(3rem, 6vw, 6rem) clamp(2rem, 4vw, 4rem)",
+                        borderRadius: "32px",
+                        background: "rgba(15, 20, 30, 0.5)",
+                        backdropFilter: "blur(24px) saturate(1.2)",
+                        WebkitBackdropFilter: "blur(24px) saturate(1.2)",
+                        border: "1px solid rgba(201, 168, 76, 0.15)",
+                        boxShadow: "var(--shadow-island-elevated)",
+                        rotateX,
+                        rotateY,
+                        transformStyle: "preserve-3d",
+                        perspective: 1500,
+                    }}
+                >
+                    {/* Dark Noise Overlay inside Monolith */}
+                    <div className="noise-overlay" style={{ position: "absolute", inset: 0, borderRadius: "inherit" }} />
+
+                    {/* Spotlight Effect inside Monolith */}
+                    <div
+                        style={{
+                            position: "absolute",
+                            inset: 0,
+                            borderRadius: "inherit",
+                            background: isHovered
+                                ? `radial-gradient(800px circle at ${spotlightPos.x}% ${spotlightPos.y}%, rgba(201, 168, 76, 0.08), transparent 40%)`
+                                : "none",
+                            pointerEvents: "none",
+                            zIndex: 1,
+                            transition: "background 300ms ease",
+                        }}
+                    />
+
+                    {/* Content Frame (Z-Depth) */}
+                    <div style={{
+                        position: "relative",
+                        zIndex: 3,
+                        transform: "translateZ(30px)",
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                        gap: "0.5rem",
-                        zIndex: 1,
-                    }}
+                        justifyContent: "center",
+                        textAlign: "center",
+                        minHeight: "400px" // Ensure enough height for perfect vertical centering
+                    }}>
+                        {/* Typewriter/Reveal Badge */}
+                        <CinematicReveal type="fadeUp" delay={0.6}>
+                            <div
+                                style={{
+                                    display: "inline-block",
+                                    padding: "0.6rem 1.75rem",
+                                    background: "rgba(201, 168, 76, 0.05)",
+                                    border: "1px solid rgba(201, 168, 76, 0.2)",
+                                    borderRadius: "100px",
+                                    fontSize: "0.7rem",
+                                    letterSpacing: "0.25em",
+                                    textTransform: "uppercase",
+                                    color: "var(--color-noble-gold)",
+                                    fontFamily: "var(--font-body)",
+                                    fontWeight: 600,
+                                    marginBottom: "3rem",
+                                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(201, 168, 76, 0.1)",
+                                }}
+                            >
+                                Absolute Fiduciary Restraint
+                            </div>
+                        </CinematicReveal>
+
+                        {/* Staggered Title coming aggressively from Z-axis */}
+                        <motion.h1
+                            style={{
+                                fontFamily: "var(--font-heading)",
+                                fontSize: "clamp(2.5rem, 6vw, 5.5rem)",
+                                lineHeight: 1.1,
+                                color: "var(--color-noble-ivory)",
+                                marginBottom: "2.5rem",
+                                transform: "translateZ(50px)",
+                                textAlign: "center",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                gap: "0.2rem"
+                            }}
+                        >
+                            <span style={{ display: "block" }}>
+                                <StaggeredBlurText
+                                    text="Preserving Legacy."
+                                    as="span"
+                                    style={{ justifyContent: "center" }}
+                                    staggerDelay={0.08}
+                                    delay={0.8}
+                                />
+                            </span>
+                            <span style={{ display: "block", color: "var(--color-noble-gold)" }}>
+                                <StaggeredBlurText
+                                    text="Defending Capital."
+                                    as="span"
+                                    style={{ justifyContent: "center" }}
+                                    staggerDelay={0.08}
+                                    delay={1.4}
+                                />
+                            </span>
+                        </motion.h1>
+
+                        {/* CTAs */}
+                        <CinematicReveal type="fadeUp" delay={2.2}>
+                            <div style={{ display: "flex", gap: "1.25rem", justifyContent: "center", flexWrap: "wrap", marginTop: "1rem", transform: "translateZ(20px)" }}>
+                                <MagneticButton as="a" href="/the-firm" className="btn-noble-primary" intensity={0.2} style={{ borderRadius: "100px" }}>
+                                    Discover Our Heritage
+                                </MagneticButton>
+                                <MagneticButton as="a" href="/contact" className="btn-noble-secondary" intensity={0.2} style={{ borderRadius: "100px" }}>
+                                    Request Audience
+                                </MagneticButton>
+                            </div>
+                        </CinematicReveal>
+                    </div>
+
+                    {/* 3. Floating Orbit Stats around the Monolith boundaries */}
+                    {[
+                        { value: 4.2, suffix: "B+", prefix: "$", label: "Assets Under Management", position: { top: "-20px", right: "-20px" }, delay: 2.4 },
+                        { value: 1987, suffix: "", prefix: "", label: "Established", position: { bottom: "-15px", left: "-15px" }, delay: 2.6 },
+                        { value: 100, suffix: "%", prefix: "", label: "ASIC Regulated", position: { bottom: "-20px", right: "-10px" }, delay: 2.8 },
+                    ].map((stat, i) => (
+                        <motion.div
+                            key={stat.label}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: stat.delay, duration: 0.8, ease: "easeOut" }}
+                            style={{
+                                position: "absolute",
+                                ...stat.position,
+                                zIndex: 4,
+                            }}
+                        >
+                            <IslandCard
+                                tiltIntensity={8}
+                                floatIdle={true}
+                                style={{
+                                    padding: "1.25rem 1.75rem",
+                                    borderRadius: "16px",
+                                    background: "rgba(10, 15, 25, 0.85)",
+                                    border: "1px solid rgba(201, 168, 76, 0.3)",
+                                    boxShadow: "0 16px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(201, 168, 76, 0.1)",
+                                }}
+                            >
+                                <div style={{ textAlign: "center", transform: "translateZ(10px)" }}>
+                                    <div
+                                        style={{
+                                            fontFamily: "var(--font-heading)",
+                                            fontSize: "1.75rem",
+                                            fontWeight: 700,
+                                            color: "var(--color-noble-gold)",
+                                        }}
+                                    >
+                                        {stat.prefix === "$" ? (
+                                            <><AnimatedCounter target={stat.value} prefix="$" suffix="B+" /></>
+                                        ) : stat.label === "Established" ? (
+                                            <AnimatedCounter target={stat.value} />
+                                        ) : (
+                                            <AnimatedCounter target={stat.value} suffix="%" />
+                                        )}
+                                    </div>
+                                    <div
+                                        style={{
+                                            fontSize: "0.55rem",
+                                            letterSpacing: "0.15em",
+                                            textTransform: "uppercase",
+                                            color: "var(--color-noble-ivory)",
+                                            marginTop: "0.25rem",
+                                            fontFamily: "var(--font-body)",
+                                        }}
+                                    >
+                                        {stat.label}
+                                    </div>
+                                </div>
+                            </IslandCard>
+                        </motion.div>
+                    ))}
+                </motion.div>
+
+                {/* 4. Glowing Scroll Ring */}
+                <motion.div
+                    style={{ opacity }}
+                    className="scroll-indicator"
                 >
-                    <span
-                        style={{
-                            fontSize: "0.6rem",
-                            letterSpacing: "0.2em",
-                            textTransform: "uppercase",
-                            color: "var(--color-noble-gold-muted)",
-                            fontFamily: "var(--font-body)",
-                        }}
-                    >
-                        Descend
-                    </span>
-                    <motion.div
-                        animate={{ y: [0, 8, 0] }}
-                        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                    >
-                        <ChevronDown size={16} style={{ color: "var(--color-noble-gold-muted)" }} />
-                    </motion.div>
                     <div
                         style={{
-                            width: "1px",
-                            height: "40px",
-                            background: "linear-gradient(to bottom, var(--color-noble-gold-muted), transparent)",
+                            position: "absolute",
+                            bottom: "2.5rem",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: "0.75rem",
+                            zIndex: 1,
                         }}
-                    />
-                </div>
+                    >
+                        <span
+                            style={{
+                                fontSize: "0.6rem",
+                                letterSpacing: "0.2em",
+                                textTransform: "uppercase",
+                                color: "var(--color-noble-gold-muted)",
+                                fontFamily: "var(--font-body)",
+                            }}
+                        >
+                            Descend
+                        </span>
+                        {/* Glowing Ring Instead of Chevron */}
+                        <motion.div
+                            animate={{
+                                scale: [1, 1.2, 1],
+                                opacity: [0.3, 1, 0.3],
+                                boxShadow: [
+                                    "0 0 0px rgba(201,168,76,0)",
+                                    "0 0 20px rgba(201,168,76,0.3)",
+                                    "0 0 0px rgba(201,168,76,0)",
+                                ]
+                            }}
+                            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                            style={{
+                                width: "12px",
+                                height: "12px",
+                                borderRadius: "50%",
+                                border: "1.5px solid var(--color-noble-gold)",
+                            }}
+                        />
+                        <div
+                            style={{
+                                width: "1px",
+                                height: "30px",
+                                background: "linear-gradient(to bottom, var(--color-noble-gold-muted), transparent)",
+                            }}
+                        />
+                    </div>
+                </motion.div>
             </motion.div>
         </section>
     );

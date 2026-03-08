@@ -77,7 +77,7 @@ export default function HoverRevealArticle({ post, index }: HoverRevealArticlePr
                             {post.category}
                         </span>
                         <span style={{ color: "var(--color-noble-slate)", fontSize: "0.85rem" }}>
-                            {new Date(post.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                            {new Date(post.createdAt).toLocaleDateString('en-AU', { year: 'numeric', month: 'long', day: 'numeric' })}
                         </span>
                     </div>
 

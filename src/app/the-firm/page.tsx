@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 const timeline = [
-    { year: "1987", title: "Foundation", desc: "Established in Melbourne to serve three prominent family offices with a strict fiduciary mandate." },
+    { year: "1987", title: "Foundation", desc: "Established in Sydney to serve three prominent family offices with a strict fiduciary mandate." },
     { year: "1999", title: "Global Expansion", desc: "Initiated direct global equity mandates and established international custodian relationships." },
     { year: "2008", title: "The GFC Resilience", desc: "Our Absolute Return framework successfully insulated client capital from systemic drawdowns." },
     { year: "2024", title: "Institutional Evolution", desc: "Launched enhanced Family Office administration services tailored for ultra-high-net-worth complexities." }

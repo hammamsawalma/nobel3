@@ -1,5 +1,5 @@
 import HeroSection from "@/components/sections/HeroSection";
-import MarketTicker from "@/components/MarketTicker";
+
 import AboutSection from "@/components/sections/AboutSection";
 import ServicesSection from "@/components/sections/ServicesSection";
 import PhilosophySection from "@/components/sections/PhilosophySection";
@@ -27,7 +27,7 @@ export default function Home() {
                 and background color so they slide *over* the sticky hero section.
             */}
             <div style={{ position: "relative", zIndex: 10, background: "var(--color-noble-black)", boxShadow: "0 -20px 40px rgba(0,0,0,0.5)" }}>
-                <MarketTicker />
+
                 <AboutSection />
                 <ServicesSection />
                 <PhilosophySection />

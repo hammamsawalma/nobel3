@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
@@ -87,26 +88,16 @@ export default function V3Header() {
             >
                 {/* Logo */}
                 <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                    <div
-                        style={{
-                            width: islandMode ? "34px" : "40px",
-                            height: islandMode ? "34px" : "40px",
-                            border: "1.5px solid var(--color-noble-gold)",
-                            borderRadius: "50%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontFamily: "var(--font-heading)",
-                            fontSize: islandMode ? "0.9rem" : "1.1rem",
-                            fontWeight: 700,
-                            color: "var(--color-noble-gold)",
-                            transition: "all 400ms ease",
-                            boxShadow: "0 0 12px rgba(201, 168, 76, 0.1)",
-                        }}
-                    >
-                        NR
+                    <div style={{ position: "relative", width: islandMode ? "34px" : "44px", height: islandMode ? "34px" : "44px", transition: "all 400ms ease", flexShrink: 0 }}>
+                        <Image
+                            src="/images/logo/logo-monogram.png"
+                            alt="Noble Rock"
+                            fill
+                            style={{ objectFit: "contain", borderRadius: islandMode ? "50%" : "0" }}
+                            priority
+                        />
                     </div>
-                    <div style={{ transition: "opacity 300ms ease", opacity: islandMode ? 0 : 1, width: islandMode ? 0 : "auto", overflow: "hidden" }}>
+                    <div style={{ transition: "opacity 300ms ease, width 300ms ease", opacity: islandMode ? 0 : 1, width: islandMode ? 0 : "auto", overflow: "hidden" }}>
                         <div
                             style={{
                                 fontFamily: "var(--font-heading)",
@@ -210,6 +201,20 @@ export default function V3Header() {
                             gap: "2.5rem",
                         }}
                     >
+                        {/* Mobile Menu Logo */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.1, duration: 0.6 }}
+                            style={{ position: "relative", width: "80px", height: "80px", marginBottom: "1rem" }}
+                        >
+                            <Image
+                                src="/images/logo/logo-monogram.png"
+                                alt="Noble Rock"
+                                fill
+                                style={{ objectFit: "contain", filter: "drop-shadow(0 0 20px rgba(201, 168, 76, 0.2))" }}
+                            />
+                        </motion.div>
                         {navLinks.map((link, i) => (
                             <motion.div
                                 key={link.href}

@@ -74,7 +74,7 @@ export default function TestimonialsSection() {
                 </CinematicReveal>
 
                 {/* Asymmetric Grid: 1 large + 3 stacked */}
-                <div style={{
+                <div className="testimonials-grid" style={{
                     display: "grid",
                     gridTemplateColumns: "1.2fr 1fr",
                     gridTemplateRows: "auto auto",

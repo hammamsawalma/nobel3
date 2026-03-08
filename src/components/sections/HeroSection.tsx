@@ -158,21 +158,24 @@ export default function HeroSection() {
                         left: "50%",
                         transform: "translate(-50%, -50%)",
                         zIndex: 1,
-                        color: "rgba(201, 168, 76, 0.03)",
-                        fontFamily: "var(--font-heading)",
-                        fontSize: "clamp(20rem, 40vw, 40rem)",
-                        fontWeight: 800,
-                        lineHeight: 1,
-                        whiteSpace: "nowrap",
+                        width: "clamp(20rem, 40vw, 40rem)",
+                        height: "clamp(20rem, 40vw, 40rem)",
+                        opacity: 0.04,
                         pointerEvents: "none",
                         userSelect: "none",
                     }}
                 >
-                    NR
+                    <Image
+                        src="/images/logo/logo-monogram.png"
+                        alt=""
+                        fill
+                        style={{ objectFit: "contain", mixBlendMode: "luminosity" }}
+                    />
                 </motion.div>
 
                 {/* 2. The Absolute Monolith */}
                 <motion.div
+                    className="hero-monolith"
                     onMouseMove={handleMouseMove}
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={handleMouseLeave}
@@ -181,6 +184,7 @@ export default function HeroSection() {
                         zIndex: 2,
                         width: "90%",
                         maxWidth: "1100px",
+                        marginTop: "clamp(60px, 8vh, 100px)", /* Top clearance for fixed V3Header */
                         padding: "clamp(3rem, 6vw, 6rem) clamp(2rem, 4vw, 4rem)",
                         borderRadius: "32px",
                         background: "rgba(15, 20, 30, 0.5)",
@@ -213,7 +217,7 @@ export default function HeroSection() {
                     />
 
                     {/* Content Frame (Z-Depth) */}
-                    <div style={{
+                    <div className="hero-content-frame" style={{
                         position: "relative",
                         zIndex: 3,
                         transform: "translateZ(30px)",
@@ -222,11 +226,12 @@ export default function HeroSection() {
                         alignItems: "center",
                         justifyContent: "center",
                         textAlign: "center",
-                        minHeight: "400px" // Ensure enough height for perfect vertical centering
+                        minHeight: "400px"
                     }}>
                         {/* Typewriter/Reveal Badge */}
                         <CinematicReveal type="fadeUp" delay={0.6}>
                             <div
+                                className="hero-badge"
                                 style={{
                                     display: "inline-block",
                                     padding: "0.6rem 1.75rem",
@@ -285,7 +290,7 @@ export default function HeroSection() {
 
                         {/* CTAs */}
                         <CinematicReveal type="fadeUp" delay={2.2}>
-                            <div style={{ display: "flex", gap: "1.25rem", justifyContent: "center", flexWrap: "wrap", marginTop: "1rem", transform: "translateZ(20px)" }}>
+                            <div className="hero-cta-row" style={{ display: "flex", gap: "1.25rem", justifyContent: "center", flexWrap: "wrap", marginTop: "1rem", transform: "translateZ(20px)" }}>
                                 <MagneticButton as="a" href="/the-firm" className="btn-noble-primary" intensity={0.2} style={{ borderRadius: "100px" }}>
                                     Discover Our Heritage
                                 </MagneticButton>
@@ -294,69 +299,77 @@ export default function HeroSection() {
                                 </MagneticButton>
                             </div>
                         </CinematicReveal>
-                    </div>
 
-                    {/* 3. Floating Orbit Stats around the Monolith boundaries */}
-                    {[
-                        { value: 4.2, suffix: "B+", prefix: "$", label: "Assets Under Management", position: { top: "-20px", right: "-20px" }, delay: 2.4 },
-                        { value: 1987, suffix: "", prefix: "", label: "Established", position: { bottom: "-15px", left: "-15px" }, delay: 2.6 },
-                        { value: 100, suffix: "%", prefix: "", label: "ASIC Regulated", position: { bottom: "-20px", right: "-10px" }, delay: 2.8 },
-                    ].map((stat, i) => (
-                        <motion.div
-                            key={stat.label}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: stat.delay, duration: 0.8, ease: "easeOut" }}
-                            style={{
-                                position: "absolute",
-                                ...stat.position,
-                                zIndex: 4,
-                            }}
-                        >
-                            <IslandCard
-                                tiltIntensity={8}
-                                floatIdle={true}
+                        {/* Integrated stat strip — replacing floating cards */}
+                        <CinematicReveal type="fadeUp" delay={2.4}>
+                            <div
+                                className="hero-integrated-stats"
                                 style={{
-                                    padding: "1.25rem 1.75rem",
-                                    borderRadius: "16px",
-                                    background: "rgba(10, 15, 25, 0.85)",
-                                    border: "1px solid rgba(201, 168, 76, 0.3)",
-                                    boxShadow: "0 16px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(201, 168, 76, 0.1)",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    gap: "0",
+                                    marginTop: "3rem",
+                                    padding: "1.5rem 1rem",
+                                    borderTop: "1px solid rgba(201, 168, 76, 0.2)",
+                                    borderBottom: "1px solid rgba(201, 168, 76, 0.1)",
+                                    transform: "translateZ(15px)",
                                 }}
                             >
-                                <div style={{ textAlign: "center", transform: "translateZ(10px)" }}>
+                                {[
+                                    { value: 4.2, prefix: "$", suffix: "B+", label: "Assets Under Management" },
+                                    { value: 1987, prefix: "", suffix: "", label: "Established" },
+                                    { value: 100, prefix: "", suffix: "%", label: "ASIC Regulated" },
+                                ].map((stat, i) => (
                                     <div
+                                        key={stat.label}
+                                        className="stat-item"
                                         style={{
-                                            fontFamily: "var(--font-heading)",
-                                            fontSize: "1.75rem",
-                                            fontWeight: 700,
-                                            color: "var(--color-noble-gold)",
+                                            flex: 1,
+                                            textAlign: "center",
+                                            borderRight: i < 2 ? "1px solid rgba(201, 168, 76, 0.35)" : "none",
+                                            padding: "0 1.5rem",
                                         }}
                                     >
-                                        {stat.prefix === "$" ? (
-                                            <><AnimatedCounter target={stat.value} prefix="$" suffix="B+" /></>
-                                        ) : stat.label === "Established" ? (
-                                            <AnimatedCounter target={stat.value} />
-                                        ) : (
-                                            <AnimatedCounter target={stat.value} suffix="%" />
-                                        )}
+                                        <div
+                                            className="stat-value"
+                                            style={{
+                                                fontFamily: "var(--font-heading)",
+                                                fontSize: "1.75rem",
+                                                fontWeight: 700,
+                                                color: "var(--color-noble-gold)",
+                                                lineHeight: 1.2,
+                                            }}
+                                        >
+                                            {stat.prefix === "$" ? (
+                                                <AnimatedCounter target={stat.value} prefix="$" suffix="B+" />
+                                            ) : stat.label === "Established" ? (
+                                                <AnimatedCounter target={stat.value} />
+                                            ) : (
+                                                <AnimatedCounter target={stat.value} suffix="%" />
+                                            )}
+                                        </div>
+                                        <div
+                                            className="stat-label"
+                                            style={{
+                                                fontSize: "0.65rem",
+                                                letterSpacing: "0.15em",
+                                                textTransform: "uppercase",
+                                                color: "rgba(255,255,255,0.5)",
+                                                marginTop: "0.5rem",
+                                                fontFamily: "var(--font-body)",
+                                            }}
+                                        >
+                                            {stat.label}
+                                        </div>
                                     </div>
-                                    <div
-                                        style={{
-                                            fontSize: "0.55rem",
-                                            letterSpacing: "0.15em",
-                                            textTransform: "uppercase",
-                                            color: "var(--color-noble-ivory)",
-                                            marginTop: "0.25rem",
-                                            fontFamily: "var(--font-body)",
-                                        }}
-                                    >
-                                        {stat.label}
-                                    </div>
-                                </div>
-                            </IslandCard>
-                        </motion.div>
-                    ))}
+                                ))}
+                            </div>
+                        </CinematicReveal>
+                    </div>
+
+
                 </motion.div>
 
                 {/* 4. Glowing Scroll Ring */}

@@ -19,7 +19,7 @@
     /* ── Neutrals ── */
     --color-noble-ivory: #F5F1EB;
     --color-noble-silver: #E8E4DD;
-    --color-noble-slate: #6B7280;
+    --color-noble-slate: #8C96A6;
     --color-noble-gray: #374151;
 
     /* ── Functional ── */
@@ -99,7 +99,7 @@ h4 {
 }
 
 p {
-    font-size: clamp(1rem, 1.2vw, 1.125rem);
+    font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.125rem);
     color: var(--color-noble-silver);
     line-height: 1.8;
 }
@@ -127,6 +127,12 @@ p {
 ::selection {
     background-color: var(--color-noble-gold);
     color: var(--color-noble-black);
+}
+
+/* ── Form Placeholders ── */
+::placeholder {
+    color: var(--color-noble-slate);
+    opacity: 0.7;
 }
 
 /* ── Scrollbar ── */
@@ -366,6 +372,24 @@ p {
     }
 }
 
+/* ── Mobile Nav AI Pulse ── */
+@keyframes pulse-gold {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(201, 168, 76, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(201, 168, 76, 0);
+    }
+}
+
 /* ── Section Watermark Numbers ── */
 .section-watermark {
     position: absolute;
@@ -374,7 +398,7 @@ p {
     font-family: var(--font-heading);
     font-size: clamp(8rem, 20vw, 16rem);
     font-weight: 800;
-    color: rgba(201, 168, 76, 0.03);
+    color: rgba(201, 168, 76, 0.06);
     line-height: 1;
     pointer-events: none;
     user-select: none;
@@ -565,4 +589,312 @@ table tbody tr {
 table tbody tr:hover {
     background-color: rgba(201, 168, 76, 0.05) !important;
     transform: scale(1.005);
+}
+
+/* ============================================
+   MOBILE RESPONSIVENESS OVERHAUL
+   ============================================ */
+
+/* ── Tablet Breakpoint (≤ 1024px) ── */
+@media (max-width: 1024px) {
+
+    /* About stats: 4 cols → 2 cols */
+    .about-stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* Awards: 3 cols → 2 cols */
+    .awards-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* Testimonials: remove asymmetric grid */
+    .testimonials-grid {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .testimonials-grid>*:first-child {
+        grid-row: span 1 !important;
+    }
+}
+
+/* ── Mobile Breakpoint (≤ 768px) ── */
+@media (max-width: 768px) {
+
+    /* Section Padding: reduce vertical */
+    .section-padding {
+        padding: clamp(2.5rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem) !important;
+    }
+
+    .section-padding-sm {
+        padding: clamp(1.5rem, 3vw, 2rem) clamp(1rem, 4vw, 2rem) !important;
+    }
+
+    /* Island section margins */
+    .island-section {
+        margin-left: 0.35rem !important;
+        margin-right: 0.35rem !important;
+        border-radius: 16px !important;
+    }
+
+    .island-section+.island-section {
+        margin-top: -1rem !important;
+    }
+
+    /* Section watermark: smaller */
+    .section-watermark {
+        font-size: clamp(5rem, 15vw, 8rem) !important;
+        right: 1rem !important;
+    }
+
+    /* ── HERO Section Mobile ── */
+    .hero-monolith {
+        width: 95% !important;
+        padding: 2rem 1.25rem !important;
+        border-radius: 20px !important;
+    }
+
+    .hero-content-frame {
+        min-height: auto !important;
+    }
+
+    .hero-content-frame h1 {
+        font-size: clamp(1.75rem, 8vw, 2.5rem) !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    .hero-badge {
+        padding: 0.5rem 1.25rem !important;
+        font-size: 0.6rem !important;
+        margin-bottom: 2rem !important;
+    }
+
+    .hero-cta-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.75rem !important;
+    }
+
+    .hero-cta-row>* {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    /* Hero Integrated Stats: scale down for mobile */
+    .hero-integrated-stats {
+        margin-top: 2rem !important;
+        padding: 1rem 0.5rem !important;
+    }
+
+    .hero-integrated-stats .stat-item {
+        padding: 0 0.5rem !important;
+    }
+
+    .hero-integrated-stats .stat-value {
+        font-size: 1.25rem !important;
+    }
+
+    .hero-integrated-stats .stat-label {
+        font-size: 0.55rem !important;
+        margin-top: 0.25rem !important;
+    }
+
+    /* Scroll indicator: hide on mobile */
+    .scroll-indicator {
+        display: none !important;
+    }
+
+    /* ── ABOUT Section ── */
+    .about-stats-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    /* ── SERVICES Section ── */
+    .services-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    /* ── PHILOSOPHY Section ── */
+    .philosophy-bento-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    .philosophy-bento-grid>*:first-child {
+        grid-row: span 1 !important;
+    }
+
+    .philosophy-timeline-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    /* ── TESTIMONIALS Section ── */
+    .testimonials-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    .testimonials-grid>*:first-child {
+        grid-row: span 1 !important;
+    }
+
+    .testimonials-grid .testimonial-card-featured {
+        min-height: auto !important;
+    }
+
+    /* ── AWARDS Section ── */
+    .awards-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    /* ── SECURITY Section ── */
+    .security-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    /* ── CONTACT Section ── */
+    .contact-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+    }
+
+    /* ── CALCULATOR Section ── */
+    .calc-results-row {
+        gap: 1rem !important;
+    }
+
+    .calc-results-row>div:first-child {
+        flex-basis: 100% !important;
+    }
+
+    .calc-projected-value {
+        font-size: 1.75rem !important;
+    }
+
+    /* ── NEWSLETTER Section ── */
+    .newsletter-form {
+        flex-direction: column !important;
+    }
+
+    .newsletter-form input {
+        border-right: 1px solid rgba(201, 168, 76, 0.15) !important;
+        border-radius: 12px !important;
+    }
+
+    .newsletter-form button {
+        border-radius: 12px !important;
+        width: 100% !important;
+    }
+
+    /* ── FOOTER ── */
+    .footer-columns-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 2rem !important;
+    }
+
+    .footer-copyright-bar {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 0.75rem !important;
+    }
+
+    .footer-contact-info {
+        flex-direction: column !important;
+        gap: 1rem !important;
+    }
+
+    /* Extra bottom padding on footer for MobileNav clearance */
+    footer {
+        padding-bottom: 120px !important;
+    }
+
+    /* ── Fixed Elements Stacking ── */
+    /* MobileNav is z-998 at bottom. Inquiry strip must be ABOVE it or hidden */
+    .mobile-inquiry-strip {
+        display: none !important;
+    }
+
+    /* Chat widget button: Hidden on mobile (moved to MobileNav) */
+    .chat-widget-trigger {
+        display: none !important;
+    }
+
+    /* Chat widget window: nearly fullscreen on mobile */
+    .chat-widget-window {
+        width: calc(100vw - 1.5rem) !important;
+        height: calc(100vh - 120px) !important;
+        max-height: calc(100vh - 120px) !important;
+        bottom: 0 !important;
+        right: -0.75rem !important;
+        border-radius: 16px 16px 0 0 !important;
+    }
+
+    /* ── Touch Targets ── */
+    .gold-slider::-webkit-slider-thumb {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .mobile-menu-btn {
+        width: 44px !important;
+        height: 44px !important;
+    }
+
+    /* ── Buttons on mobile ── */
+    .btn-noble-primary,
+    .btn-noble-secondary {
+        padding: 0.875rem 1.5rem !important;
+        font-size: 0.75rem !important;
+    }
+
+    /* ── Disable heavy animations on mobile ── */
+    .float-idle {
+        animation: none !important;
+    }
+}
+
+/* ── Small Phone Breakpoint (≤ 480px) ── */
+@media (max-width: 480px) {
+    h1 {
+        font-size: clamp(1.75rem, 7vw, 2.5rem) !important;
+    }
+
+    h2 {
+        font-size: clamp(1.5rem, 6vw, 2rem) !important;
+    }
+
+    h3 {
+        font-size: clamp(1.25rem, 5vw, 1.5rem) !important;
+    }
+
+    .section-padding {
+        padding: 2rem 0.75rem !important;
+    }
+
+    .island-section {
+        margin-left: 0.25rem !important;
+        margin-right: 0.25rem !important;
+        border-radius: 12px !important;
+    }
+
+    /* Footer: single column */
+    .footer-columns-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Awards: definitely single column */
+    .awards-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Calculator: full column */
+    .calc-grid {
+        gap: 2rem !important;
+    }
 }

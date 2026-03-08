@@ -63,7 +63,7 @@ export default function SecuritySection() {
                     </div>
                 </CinematicReveal>
 
-                <div style={{
+                <div className="security-grid" style={{
                     display: "grid",
                     gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
                     gap: "1.25rem",

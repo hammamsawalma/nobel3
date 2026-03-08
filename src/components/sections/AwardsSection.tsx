@@ -56,7 +56,7 @@ export default function AwardsSection() {
                 </CinematicReveal>
 
                 {/* Bento Grid: 2 large + 4 small */}
-                <div style={{
+                <div className="awards-grid" style={{
                     display: "grid",
                     gridTemplateColumns: "repeat(3, 1fr)",
                     gap: "1.25rem",

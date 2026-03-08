@@ -2,11 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, BarChart3, BookOpen, MessageSquare } from "lucide-react";
+import { Home, BarChart3, BookOpen, MessageSquare, Sparkles } from "lucide-react";
 
-const navItems = [
+type NavItem = {
+    label: string;
+    href?: string;
+    action?: string;
+    icon: React.ElementType;
+};
+
+const navItems: NavItem[] = [
     { label: "Home", href: "/", icon: Home },
     { label: "Strategies", href: "/wealth-strategies/fixed-income", icon: BarChart3 },
+    { label: "Concierge", action: "openAI", icon: Sparkles },
     { label: "Insights", href: "/insights", icon: BookOpen },
     { label: "Contact", href: "/contact", icon: MessageSquare },
 ];
@@ -43,36 +51,77 @@ export default function MobileNav() {
                     }}
                 >
                     {navItems.map((item) => {
-                        const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+                        const isActive = item.href ? (pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))) : false;
                         const Icon = item.icon;
-                        return (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    gap: "0.2rem",
-                                    padding: "0.5rem 1rem",
-                                    textDecoration: "none",
-                                    color: isActive ? "var(--color-noble-gold)" : "var(--color-noble-slate)",
-                                    transition: "color 200ms ease",
-                                    minWidth: "60px",
-                                }}
-                            >
-                                <Icon size={20} strokeWidth={isActive ? 2 : 1.5} />
+                        const isAI = item.action === "openAI";
+
+                        const content = (
+                            <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                                <Icon size={20} strokeWidth={isActive || isAI ? 2 : 1.5} />
+                                {isAI && (
+                                    <span
+                                        style={{
+                                            position: "absolute",
+                                            top: -2,
+                                            right: -4,
+                                            width: 6,
+                                            height: 6,
+                                            backgroundColor: "var(--color-noble-gold)",
+                                            borderRadius: "50%",
+                                            boxShadow: "0 0 8px var(--color-noble-gold)",
+                                            animation: "pulse-gold 2s infinite"
+                                        }}
+                                    />
+                                )}
                                 <span
                                     style={{
                                         fontSize: "0.6rem",
                                         fontFamily: "var(--font-body)",
-                                        fontWeight: isActive ? 600 : 400,
+                                        fontWeight: isActive || isAI ? 600 : 400,
                                         letterSpacing: "0.05em",
                                         textTransform: "uppercase",
+                                        marginTop: "0.2rem"
                                     }}
                                 >
                                     {item.label}
                                 </span>
+                            </div>
+                        );
+
+                        const commonStyle = {
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: "0.2rem",
+                            padding: "0.5rem 0.5rem",
+                            textDecoration: "none",
+                            color: isAI ? "var(--color-noble-gold)" : (isActive ? "var(--color-noble-gold)" : "var(--color-noble-slate)"),
+                            transition: "all 200ms ease",
+                            minWidth: "60px",
+                            background: "transparent",
+                            border: "none",
+                            cursor: "pointer",
+                        } as React.CSSProperties;
+
+                        if (isAI) {
+                            return (
+                                <button
+                                    key={item.label}
+                                    onClick={() => window.dispatchEvent(new Event("open-ai-chat"))}
+                                    style={commonStyle}
+                                >
+                                    {content}
+                                </button>
+                            );
+                        }
+
+                        return (
+                            <Link
+                                key={item.href}
+                                href={item.href!}
+                                style={commonStyle}
+                            >
+                                {content}
                             </Link>
                         );
                     })}

@@ -124,6 +124,7 @@ export default function AboutSection() {
 
                 {/* Stats Grid — Asymmetric: 1 large + 3 small */}
                 <div
+                    className="about-stats-grid"
                     style={{
                         display: "grid",
                         gridTemplateColumns: "repeat(4, 1fr)",

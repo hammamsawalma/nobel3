@@ -66,6 +66,7 @@ export default function NewsletterSection() {
 
                                 <form
                                     onSubmit={handleSubmit}
+                                    className="newsletter-form"
                                     style={{
                                         display: "flex",
                                         gap: "0",

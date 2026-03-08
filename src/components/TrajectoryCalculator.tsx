@@ -106,7 +106,7 @@ export default function TrajectoryCalculator() {
                                                 padding: "0.75rem",
                                                 background: rate === p.rate ? "rgba(201,168,76,0.1)" : "transparent",
                                                 border: `1px solid ${rate === p.rate ? "var(--color-noble-gold)" : "rgba(255,255,255,0.1)"}`,
-                                                color: rate === p.rate ? "var(--color-noble-gold)" : "var(--color-noble-slate)",
+                                                color: rate === p.rate ? "var(--color-noble-gold)" : "rgba(255,255,255,0.6)",
                                                 borderRadius: "4px",
                                                 cursor: "none",
                                                 transition: "all 200ms ease",
@@ -129,10 +129,10 @@ export default function TrajectoryCalculator() {
                     {/* Results & Chart */}
                     <CinematicReveal type="slideRight" delay={0.4}>
                         <div>
-                            <div style={{ display: "flex", gap: "2rem", marginBottom: "1rem", flexWrap: "wrap" }}>
+                            <div style={{ display: "flex", gap: "2rem", marginBottom: "1rem", flexWrap: "wrap" }} className="calc-results-row">
                                 <div>
                                     <div style={{ fontSize: "0.75rem", color: "var(--color-noble-slate)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.25rem" }}>Projected Capital</div>
-                                    <div style={{ fontFamily: "var(--font-heading)", fontSize: "2.5rem", color: "var(--color-noble-gold)", fontWeight: 700 }}>
+                                    <div className="calc-projected-value" style={{ fontFamily: "var(--font-heading)", fontSize: "2.5rem", color: "var(--color-noble-gold)", fontWeight: 700 }}>
                                         <MotionCounter value={finalBalance} prefix="$" />
                                     </div>
                                 </div>

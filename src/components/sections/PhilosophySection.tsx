@@ -80,7 +80,7 @@ export default function PhilosophySection() {
                 </CinematicReveal>
 
                 {/* Macro Themes — Bento Grid */}
-                <div style={{
+                <div className="philosophy-bento-grid" style={{
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr",
                     gridTemplateRows: "auto auto",
@@ -131,7 +131,7 @@ export default function PhilosophySection() {
                     </h3>
                 </CinematicReveal>
 
-                <div style={{
+                <div className="philosophy-timeline-grid" style={{
                     display: "grid",
                     gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
                     gap: "1.25rem",

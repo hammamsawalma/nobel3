@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
@@ -114,22 +115,18 @@ export default function V3Footer() {
                             >
                                 <div
                                     style={{
+                                        position: "relative",
                                         width: "48px",
                                         height: "48px",
-                                        border: "1.5px solid var(--color-noble-gold)",
-                                        borderRadius: "50%",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        fontFamily: "var(--font-heading)",
-                                        fontSize: "1.25rem",
-                                        fontWeight: 700,
-                                        color: "var(--color-noble-gold)",
                                         flexShrink: 0,
-                                        boxShadow: "0 0 16px rgba(201, 168, 76, 0.1)",
                                     }}
                                 >
-                                    NR
+                                    <Image
+                                        src="/images/logo/logo-monogram.png"
+                                        alt="Noble Rock"
+                                        fill
+                                        style={{ objectFit: "contain" }}
+                                    />
                                 </div>
                                 <div>
                                     <div
@@ -159,6 +156,7 @@ export default function V3Footer() {
 
                             {/* Columns Grid */}
                             <div
+                                className="footer-columns-grid"
                                 style={{
                                     display: "grid",
                                     gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
@@ -208,6 +206,7 @@ export default function V3Footer() {
                             {/* Contact Info */}
                             <div className="gold-divider-wide" style={{ marginBottom: "2rem" }} />
                             <div
+                                className="footer-contact-info"
                                 style={{
                                     display: "flex",
                                     flexWrap: "wrap",
@@ -245,7 +244,7 @@ export default function V3Footer() {
                         }}
                     >
                         <div
-                            className="container-noble"
+                            className="container-noble footer-copyright-bar"
                             style={{
                                 display: "flex",
                                 flexWrap: "wrap",

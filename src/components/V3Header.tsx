@@ -260,6 +260,16 @@ export default function V3Header() {
           .mobile-menu-btn {
             display: flex !important;
           }
+          /* Force header containment on mobile */
+          header {
+            left: 0 !important;
+            right: 0 !important;
+            max-width: 100vw !important;
+            box-sizing: border-box !important;
+            border-radius: 0 !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+          }
         }
         
         .desktop-nav-link {

@@ -67,12 +67,12 @@ export default function RootLayout({
             lang="en"
             className={`${playfair.variable} ${inter.variable} ${cormorant.variable}`}
         >
-            <body>
+            <body style={{ overflowX: "hidden", maxWidth: "100vw", width: "100%" }}>
                 <LenisProvider>
                     <ScrollProgressBar />
                     <CustomCursor />
                     <V3Header />
-                    <main style={{ minHeight: "100vh" }}>
+                    <main style={{ minHeight: "100vh", overflowX: "hidden", maxWidth: "100vw" }}>
                         <PageTransition>
                             {children}
                         </PageTransition>
@@ -86,4 +86,3 @@ export default function RootLayout({
         </html>
     );
 }
-
